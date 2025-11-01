@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Untuk Afifah & Hendra — Romantis</title>
+    <style>
+         :root {
+            --bg1: #ff7176;
+            --bg2: #fecfef;
+            --card: #ffffff;
+            --accent: #ff6b81;
+            --muted: #6b6b6b;
+        }
+        
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif
+        }
+        
+        body {
+            background: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.12), transparent), linear-gradient(135deg, var(--bg1), var(--bg2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            overflow: hidden;
+        }
+        /* Soft glowing hearts */
+        
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            transform: rotate(-45deg);
+            background: var(--accent);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            opacity: 0.9;
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent)
+        }
+        
+        .heart:before {
+            top: -10px;
+            left: 0
+        }
+        
+        .heart:after {
+            left: 10px;
+            top: 0
+        }
+        /* generate many hearts with different animations using classes */
+        
+        @keyframes floatUp {
+            to {
+                transform: translateY(-900px) rotate(10deg);
+                opacity: 0
+            }
+        }
+        
+        .card {
+            z-index: 5;
+            width: min(820px, 95%);
+            max-width: 1000px;
+            border-radius: 18px;
+            padding: 36px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.85));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(6px);
+        }
+        
+        .title {
+            font-size: 28px;
+            margin: 0 0 6px 0;
+            color: #7b1638;
+            letter-spacing: 0.6px
+        }
+        
+        .subtitle {
+            margin: 0 0 18px 0;
+            color: var(--muted)
+        }
+        
+        .message {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #40122a;
+            min-height: 140px;
+            white-space: pre-wrap;
+            font-weight: 500;
+        }
+        
+        .controls {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+        
+        button {
+            background: var(--accent);
+            border: 0;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer
+        }
+        
+        button.secondary {
+            background: transparent;
+            border: 2px solid rgba(123, 22, 56, 0.12);
+            color: var(--accent)
+        }
+        
+        .names {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+        
+        .names .pill {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.4)
+        }
+        /* typed caret */
+        
+        .caret {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: #7b1638;
+            margin-left: 4px;
+            vertical-align: bottom;
+            animation: blink .9s steps(1) infinite
+        }
+        
+        @keyframes blink {
+            50% {
+                opacity: 0
+            }
+        }
+        /* small responsive */
+        
+        @media (max-width:520px) {
+            .title {
+                font-size: 20px
+            }
+            .message {
+                font-size: 16px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating hearts (created by JS) -->
+
+    <div class="card" role="main" aria-live="polite">
+        <h1 class="title">Untuk Afifah & Hendra</h1>
+        <div class="subtitle">Sebuah rekayasa kecil berisi kata-kata manis — jalankan, dan biarkan hati berbicara.</div>
+
+        <div class="names" style="margin-bottom:12px">
+            <div class="pill">Afifah ❤️</div>
+            <div class="pill">Hendra 💫</div>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="controls">
+            <button id="playBtn">Mainkan Romansa</button>
+            <button class="secondary" id="restartBtn">Ulang dari Awal</button>
+            <button class="secondary" id="copyBtn">Salin Teks</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Personalized romantic lines ---
+        const lines = [
+            "halo semuanyaa perkenalkann saya afifahhh.",
+            "di sini apip mau buat sesuatu buat cowoo kesayangann apipp, namanya hendraa, akuu suka manggil henhen.",
+            "apipp sayanggg bangett sama henhenn.",
+            "diaa baikk, baikkk bangettt, diaa hebatt, diaa selaluuu semangattt, dia kerennn bangett, diaa ga prnahh pantang menyerahhh.",
+            "apip sayang bangettt sama henhen:(( jangan tinggalin apip yaa, JANJIIIIIIIIIII.",
+            "sama apip trus yaa, haruss happyy kaloo samaa apippp, jangan dengerinn kata orang orang ya, kita harus sama sama trus, jangan sampai kita pisah karena omongan orang ya.",
+            "apapunn keadaannya, cerita trus sama apipp, jangan sedi sedi kalo sama apip yaa, bilang kalo adaa apa apa, ilovveeyouuu sayanggkuuu,, mwahhh.",
+            "dari afifah, bogor, 31 oktober 2025.",
+        ];
+
+        const messageEl = document.getElementById('message');
+        const playBtn = document.getElementById('playBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const copyBtn = document.getElementById('copyBtn');
+
+        let idx = 0;
+        let charIdx = 0;
+        let running = false;
+        let timeoutId;
+
+        function typeNextChar() {
+            if (idx >= lines.length) {
+                // finished
+                messageEl.innerHTML += "\n\n" + "— Selesai —";
+                running = false;
+                playBtn.textContent = 'Mainkan Romansa';
+                return;
+            }
+            const line = lines[idx];
+            if (charIdx <= line.length) {
+                // show current lines plus caret
+                const shown = lines.slice(0, idx).join('\n') + (idx > 0 ? '\n' : '') + line.substring(0, charIdx);
+                messageEl.textContent = shown;
+                // ensure caret visually
+                if (!document.getElementById('__caret')) {
+                    const c = document.createElement('span');
+                    c.id = '__caret';
+                    c.className = 'caret';
+                    messageEl.appendChild(c);
+                }
+                charIdx++;
+                timeoutId = setTimeout(typeNextChar, 40 + Math.random() * 80);
+            } else {
+                // line done, add a short pause then next
+                charIdx = 0;
+                idx++;
+                timeoutId = setTimeout(typeNextChar, 700);
+            }
+        }
+
+        function start() {
+            if (running) return;
+            running = true;
+            playBtn.textContent = 'Sedang Berjalan...';
+            // reset
+            idx = 0;
+            charIdx = 0;
+            messageEl.textContent = '';
+            // remove any old caret
+            const old = document.getElementById('__caret');
+            if (old) old.remove();
+            typeNextChar();
+            // create some hearts while typing
+            heartSpawner = setInterval(spawnHeart, 500);
+        }
+
+        function stop() {
+            running = false;
+            playBtn.textContent = 'Mainkan Romansa';
+            clearTimeout(timeoutId);
+            clearInterval(heartSpawner);
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (!running) start();
+            else stop();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            clearInterval(heartSpawner);
+            idx = 0;
+            charIdx = 0;
+            messageEl.textContent = '';
+            start();
+        });
+
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(lines.join('\n'))
+                .then(() => {
+                    copyBtn.textContent = 'Tersalin!';
+                    setTimeout(() => copyBtn.textContent = 'Salin Teks', 1200);
+                })
+                .catch(() => {
+                    copyBtn.textContent = 'Gagal';
+                    setTimeout(() => copyBtn.textContent = 'Salin Teks', 1200);
+                });
+        });
+
+        // floating hearts generator
+        let heartSpawner;
+
+        function rand(min, max) {
+            return Math.random() * (max - min) + min
+        }
+
+        function spawnHeart() {
+            const h = document.createElement('div');
+            h.className = 'heart';
+            const size = rand(12, 36);
+            h.style.width = size + 'px';
+            h.style.height = size + 'px';
+            h.style.left = rand(5, 95) + '%';
+            h.style.bottom = '-60px';
+            h.style.opacity = rand(0.6, 1);
+            const dur = rand(6, 14);
+            h.style.transition = 'transform linear ' + dur + 's, opacity linear ' + dur + 's';
+            h.style.transform = 'translateY(0) rotate(-45deg)';
+            document.body.appendChild(h);
+            // trigger animation using requestAnimationFrame
+            requestAnimationFrame(() => {
+                h.style.transform = 'translateY(-900px) rotate(' + rand(-30, 30) + 'deg)';
+                h.style.opacity = 0;
+            });
+            setTimeout(() => {
+                h.remove();
+            }, dur * 1000 + 200);
+        }
+
+        // small flourish on load
+        window.addEventListener('load', () => {
+            // spawn a few hearts
+            for (let i = 0; i < 7; i++) {
+                setTimeout(spawnHeart, i * 220);
+            }
+        });
+
+        // Accessibility: allow space to toggle
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playBtn.click();
+            }
+        });
+    </script>
+</body>
+
+</html>
